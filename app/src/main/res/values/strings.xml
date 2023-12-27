@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">multiActivityTest</string>
+    <string name="non_right">NON RIGHT</string>
+</resources>

@@ -1,0 +1,12 @@
+
+
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme -->
+    <style name="Theme.Randomizer" parent="Theme.AppCompat.DayNight">
+        <item name="colorPrimary">#232323</item> <!-- Set primary color to black -->
+        <item name="colorPrimaryDark">#000000</item> <!-- Set primary dark color to black -->
+        <item name="colorAccent">#232323</item> <!-- Accent color, adjust as needed -->
+        <item name="android:windowBackground">#000000</item> <!-- Set window background color to black -->
+    </style>
+</resources>
