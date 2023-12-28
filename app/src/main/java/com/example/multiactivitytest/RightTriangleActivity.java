@@ -20,6 +20,7 @@ public class RightTriangleActivity extends AppCompatActivity {
     EditText[] angleFields = new EditText[2];
     int ANGLE_A = 0; int ANGLE_B = 1;
     double angles[] = {0, 0, 90}; // Angles [a, b, c]
+    int anglesInputted;
 
 
     // == SIDE LENGTHS =========================
@@ -27,6 +28,7 @@ public class RightTriangleActivity extends AppCompatActivity {
     int SIDE_A = 0; int SIDE_B = 1; int SIDE_C = 2;
     EditText[] sideFields = new EditText[3];
     double[] sides = new double[3];
+    int sidesInputted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,20 +65,31 @@ public class RightTriangleActivity extends AppCompatActivity {
         }
         else
         {
-            if (isValidInput()) {
-
+            // == CHECK IF INVALID INPUT =====
+            if (!isValidInput())
+            {
+                // does nothing
             }
-            else {
-                // conduct checks
-                info.setText("SIDES: " + Arrays.toString(sides) + "\nANGLES: " + Arrays.toString(angles));
+            else
+            {
+                if (!enoughData())
+                {
+                    // does nothing
+                }
+                else {
+                    info.setText("SIDES: " + Arrays.toString(sides) + "\nANGLES: " + Arrays.toString(angles));
+                }
             }
         }
     }
 
 
     public void registerInput() {
-        // == REGISTER ANGLES =====
 
+        anglesInputted = 0;
+        sidesInputted = 0;
+
+        // == REGISTER ANGLES =====
         for (int angleField = 0; angleField < angleFields.length; angleField++) {
 
             String angle = angleFields[angleField].getText().toString().trim();
@@ -84,6 +97,7 @@ public class RightTriangleActivity extends AppCompatActivity {
             if (!angle.isEmpty()) {
 
                 angles[angleField] = Double.parseDouble(angle);
+                anglesInputted++;
             }
             else // if there was nothing entered.
             {
@@ -92,13 +106,13 @@ public class RightTriangleActivity extends AppCompatActivity {
         }
 
         // == REGISTER SIDES =====
-
         for (int sideField = 0; sideField < sideFields.length; sideField++) {
 
             String side = sideFields[sideField].getText().toString().trim();
 
             if (!side.isEmpty()) {
                 sides[sideField] = Double.parseDouble(side);
+                sidesInputted++;
             }
             else // if there was nothing entered.
             {
@@ -125,6 +139,7 @@ public class RightTriangleActivity extends AppCompatActivity {
         // == SIDES =====
         if (sides[SIDE_C] != 0.0) // Side C has been entered.
         {
+            // Side C is the greatest.
             for (int side = 0; side < (sides.length - 1); side++)
             {
                 if (sides[side] >= sides[SIDE_C])
@@ -133,6 +148,28 @@ public class RightTriangleActivity extends AppCompatActivity {
                     return false;
                 }
             }
+
+            // Pythagorean Theorem..
+            if (sides[SIDE_A] != 0.0 && sides[SIDE_B] != 0)
+            {
+                if ((Math.pow(sides[SIDE_A], 2) + Math.pow(sides[SIDE_B], 2)) != Math.pow(sides[SIDE_C], 2))
+                {
+                    info.setText("THOSE SIDES DONT SEEM TO BE ADDING UP...");
+                    return false;
+                }
+            }
+
+            // TODO check sin cos tan validity? (prob not)
+
+        }
+
+        return true;
+    }
+
+    public boolean enoughData() {
+        if (!((sidesInputted >= 2) || ((sidesInputted >= 1) && (anglesInputted >= 1)))) {
+            info.setText("NOT ENOUGH DATA [2 SIDES || 1 ANGLE AND 1 SIDE]");
+            return false;
         }
 
         return true;
