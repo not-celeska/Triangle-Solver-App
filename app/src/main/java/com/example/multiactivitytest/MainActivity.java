@@ -2,6 +2,7 @@ package com.example.multiactivitytest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,19 +14,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void homeLayoutButton(View view)
+    public void openRightTriangle(View view)
     {
-        setContentView(R.layout.activity_main);
+        Intent intent = new Intent(this, RightTriangleActivity.class);
+        startActivity(intent);
     }
 
-    public void rightLayoutButton(View view)
-    {
-        setContentView(R.layout.right_triangle);
+    public void openNonRightTriangle(View view) {
+        //        Intent intent = new Intent(this, NonRightTriangleActivity.class);
+        //        startActivity(intent);
     }
-
-    public void nonrightLayoutButton(View view)
-    {
-        setContentView(R.layout.non_right_triangle);
-    }
-
 }
