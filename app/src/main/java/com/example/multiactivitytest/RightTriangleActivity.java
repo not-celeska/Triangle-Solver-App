@@ -23,7 +23,7 @@ public class RightTriangleActivity extends AppCompatActivity {
         info = findViewById(R.id.inputtedData);
         fieldAngleB = findViewById(R.id.angleB);
     }
-
+// ook
     public void submitData(View view) {
         String inputText = fieldAngleB.getText().toString().trim();
 
