@@ -130,9 +130,9 @@ public class RightTriangleActivity extends AppCompatActivity {
             info.setText("ANGLES OTHER THAN C CANNOT BE 90 DEGREES!");
             return false;
         }
-        else if (angles[ANGLE_A] + angles[ANGLE_B] > 90)
+        else if (anglesInputted == 2 && angles[ANGLE_A] + angles[ANGLE_B] != 90)
         {
-            info.setText("THE SUM OF ANGLES A AND B CANNOT BE GREATER THAN TO 90!");
+            info.setText("THE SUM OF ANGLES A AND B HAS TO BE EQUAL TO 90!");
             return false;
         }
 
