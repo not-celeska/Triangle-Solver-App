@@ -63,10 +63,13 @@ public class RightTriangleActivity extends AppCompatActivity {
         }
         else
         {
-            if (isValidInput())
-            // conduct checks
-            info.setText("SIDES: " + Arrays.toString(sides) + "\nANGLES: " + Arrays.toString(angles));
+            if (isValidInput()) {
 
+            }
+            else {
+                // conduct checks
+                info.setText("SIDES: " + Arrays.toString(sides) + "\nANGLES: " + Arrays.toString(angles));
+            }
         }
     }
 
