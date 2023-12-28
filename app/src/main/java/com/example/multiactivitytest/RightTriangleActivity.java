@@ -63,7 +63,7 @@ public class RightTriangleActivity extends AppCompatActivity {
         }
         else
         {
-
+            if (isValidInput())
             // conduct checks
             info.setText("SIDES: " + Arrays.toString(sides) + "\nANGLES: " + Arrays.toString(angles));
 
@@ -105,6 +105,35 @@ public class RightTriangleActivity extends AppCompatActivity {
     }
 
 
+    public boolean isValidInput() {
+
+        // == ANGLES =============================================
+        if (angles[ANGLE_A] >= 90.0 || angles[ANGLE_B] >= 90.0)
+        {
+            info.setText("ANGLES OTHER THAN C CANNOT BE 90 DEGREES!");
+            return false;
+        }
+        else if (angles[ANGLE_A] + angles[ANGLE_B] > 90)
+        {
+            info.setText("THE SUM OF ANGLES A AND B CANNOT BE GREATER THAN TO 90!");
+            return false;
+        }
+
+        // == SIDES =====
+        if (sides[SIDE_C] != 0.0) // Side C has been entered.
+        {
+            for (int side = 0; side < (sides.length - 1); side++)
+            {
+                if (sides[side] >= sides[SIDE_C])
+                {
+                    info.setText("SIDE C MUST BE THE LONGEST!");
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 
     public void closeActivity(View view)
     {
