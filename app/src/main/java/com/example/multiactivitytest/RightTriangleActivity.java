@@ -68,15 +68,17 @@ public class RightTriangleActivity extends AppCompatActivity {
             // == CHECK IF INVALID INPUT =====
             if (!isValidInput())
             {
-                // does nothing
+                // say "invalid input"
             }
             else
             {
                 if (!enoughData())
                 {
-                    // does nothing
+                    // say "not enough data"
                 }
-                else {
+                else
+                {
+                    solveBySides();
                     info.setText("SIDES: " + Arrays.toString(sides) + "\nANGLES: " + Arrays.toString(angles));
                 }
             }
@@ -120,7 +122,6 @@ public class RightTriangleActivity extends AppCompatActivity {
             }
         }
     }
-
 
     public boolean isValidInput() {
 
@@ -173,6 +174,72 @@ public class RightTriangleActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    public void solveBySides() {
+        if (variableKnown('a') && variableKnown('b'))
+        {
+            sides[SIDE_C] = roundTwoPlaces(Math.sqrt((Math.pow(sides[SIDE_A], 2) + (Math.pow(sides[SIDE_B], 2)))));
+            angles[ANGLE_B] = roundTwoPlaces(Math.toDegrees(Math.atan(sides[SIDE_A] / sides[SIDE_B])));
+            angles[ANGLE_A] = 90 - angles[ANGLE_B];
+        }
+        else if (variableKnown('a') && variableKnown('c'))
+        {
+            sides[SIDE_B] = roundTwoPlaces(Math.sqrt((Math.pow(sides[SIDE_C], 2) - (Math.pow(sides[SIDE_A], 2)))));
+            angles[ANGLE_A] = roundTwoPlaces(Math.toDegrees(Math.asin(sides[SIDE_A] / sides[SIDE_C])));
+            angles[ANGLE_B] = 90 - angles[ANGLE_A];
+        }
+        else // b and c are known
+        {
+            sides[SIDE_A] = roundTwoPlaces(Math.sqrt((Math.pow(sides[SIDE_C], 2) - (Math.pow(sides[SIDE_B], 2)))));
+            angles[ANGLE_B] = roundTwoPlaces(Math.toDegrees(Math.asin(sides[SIDE_B] / sides[SIDE_C])));
+            angles[ANGLE_A] = 90 - angles[ANGLE_B];
+        }
+    }
+
+    public boolean variableKnown(char variable)
+    {
+        switch (variable)
+        {
+            // SIDE LENGTHS
+            case 'a':
+                if (sides[SIDE_A] != 0.0)
+                {
+                    return true;
+                }
+                break;
+            case 'b':
+                if (sides[SIDE_B] != 0.0)
+                {
+                    return true;
+                }
+                break;
+            case 'c':
+                if (sides[SIDE_C] != 0.0)
+                {
+                    return true;
+                }
+                break;
+
+            // ANGLES
+            case 'A':
+                if (angles[ANGLE_A] != 0.0)
+                {
+                    return true;
+                }
+                break;
+            case 'B':
+                if (angles[ANGLE_B] != 0.0)
+                {
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    public double roundTwoPlaces(double number) {
+        return (Math.round(100 * number) / 100.0);
     }
 
     public void closeActivity(View view)
