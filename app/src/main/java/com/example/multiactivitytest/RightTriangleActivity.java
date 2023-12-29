@@ -2,7 +2,6 @@ package com.example.multiactivitytest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -30,6 +29,14 @@ public class RightTriangleActivity extends AppCompatActivity {
     double[] sides = new double[3];
     int sidesInputted;
 
+    // == RESULTS ===========
+//    TextView resultSideA = findViewById(R.id.resultSideA);
+//    TextView resultSideB = findViewById(R.id.resultSideC);
+//    TextView resultSideC = findViewById(R.id.resultSideB);
+//    TextView resultAngleA = findViewById(R.id.resultAngleA);
+//    TextView resultAngleB = findViewById(R.id.resultAngleB);
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +60,6 @@ public class RightTriangleActivity extends AppCompatActivity {
         sideFields[SIDE_C] = fieldSideC;
 
         // Result Text..
-
-
 
     }
 
@@ -81,6 +86,9 @@ public class RightTriangleActivity extends AppCompatActivity {
                 info.setText("ANGLES [A, B, C]: " + Arrays.toString(angles) + "\nSIDES [a, b, c]: " + Arrays.toString(sides));
 
                 // switch to the results layout
+
+                openResults(view);
+
             }
         } else {
             info.setText("YOU DID NOT ENTER ANYTHING!");
@@ -288,9 +296,25 @@ public class RightTriangleActivity extends AppCompatActivity {
         return (Math.round(100 * number) / 100.0);
     }
 
-    public void openResults(View view)
-    {
-        setContentView(R.layout.right_triangle_results);
+    public void openResults(View view) {
+        View resultsLayout = getLayoutInflater().inflate(R.layout.right_triangle_results, null);
+
+        TextView resultSideA = resultsLayout.findViewById(R.id.resultSideA);
+        TextView resultSideB = resultsLayout.findViewById(R.id.resultSideB);
+        TextView resultSideC = resultsLayout.findViewById(R.id.resultSideC);
+        TextView resultAngleA = resultsLayout.findViewById(R.id.resultAngleA);
+        TextView resultAngleB = resultsLayout.findViewById(R.id.resultAngleB);
+
+        // Use the TextViews as needed
+        resultSideA.setText(String.valueOf(sides[SIDE_A]));
+        resultSideB.setText(String.valueOf(sides[SIDE_B]));
+        resultSideC.setText(String.valueOf(sides[SIDE_C]));
+        resultAngleA.setText(String.valueOf(angles[ANGLE_A]));
+        resultAngleB.setText(String.valueOf(angles[ANGLE_B]));
+
+        // ... and so on
+
+        setContentView(resultsLayout);
     }
 
     public void closeResults(View view)
