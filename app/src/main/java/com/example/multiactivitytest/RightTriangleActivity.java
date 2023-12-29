@@ -2,7 +2,7 @@ package com.example.multiactivitytest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -52,38 +52,41 @@ public class RightTriangleActivity extends AppCompatActivity {
         sideFields[SIDE_B] = fieldSideB;
         sideFields[SIDE_C] = fieldSideC;
 
+        // Result Text..
+
+
+
     }
 
     public void submitData(View view) {
-
         // == REGISTER [LOG] INPUT ======
         registerInput();
 
         // == CHECK IF NOTHING WAS ENTERED =====
-        if (Arrays.equals(sides, new double[] {0.0, 0.0, 0.0}) && Arrays.equals(angles, new double[] {0.0, 0.0, 90.0})) {
+        if (!(Arrays.equals(sides, new double[] {0.0, 0.0, 0.0}) && Arrays.equals(angles, new double[] {0.0, 0.0, 90.0}))) {
+            // == CHECK IF INVALID INPUT =====
+            if (isValidInput()) {
+                switch (howToCalculate()) {
+                    case 1:
+                        solveBySides();
+                        break;
+                    case 2:
+                        solveBySideAngle();
+                        break;
+                    case -1:
+                        info.setText("NOT ENOUGH DATA");
+                }
+
+                // display results in info TextView
+                info.setText("ANGLES [A, B, C]: " + Arrays.toString(angles) + "\nSIDES [a, b, c]: " + Arrays.toString(sides));
+
+                // switch to the results layout
+            }
+        } else {
             info.setText("YOU DID NOT ENTER ANYTHING!");
         }
-        else
-        {
-            // == CHECK IF INVALID INPUT =====
-            if (!isValidInput())
-            {
-                // say "invalid input"
-            }
-            else
-            {
-                if (!enoughData())
-                {
-                    // say "not enough data"
-                }
-                else
-                {
-                    solveBySides();
-                    info.setText("SIDES: " + Arrays.toString(sides) + "\nANGLES: " + Arrays.toString(angles));
-                }
-            }
-        }
     }
+
 
 
     public void registerInput() {
@@ -167,13 +170,19 @@ public class RightTriangleActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean enoughData() {
-        if (!((sidesInputted >= 2) || ((sidesInputted >= 1) && (anglesInputted >= 1)))) {
-            info.setText("NOT ENOUGH DATA [2 SIDES || 1 ANGLE AND 1 SIDE]");
-            return false;
+    public int howToCalculate() { // 1. 2 side way | 2. 1 side 1 angle | -1. cant do anything
+        if (sidesInputted >= 2)
+        {
+            return 1;
         }
-
-        return true;
+        else if ((sidesInputted >= 1) && (anglesInputted >= 1))
+        {
+            return 2;
+        }
+        else
+        {
+            return -1;
+        }
     }
 
     public void solveBySides() {
@@ -194,6 +203,43 @@ public class RightTriangleActivity extends AppCompatActivity {
             sides[SIDE_A] = roundTwoPlaces(Math.sqrt((Math.pow(sides[SIDE_C], 2) - (Math.pow(sides[SIDE_B], 2)))));
             angles[ANGLE_B] = roundTwoPlaces(Math.toDegrees(Math.asin(sides[SIDE_B] / sides[SIDE_C])));
             angles[ANGLE_A] = 90 - angles[ANGLE_B];
+        }
+    }
+
+    public void solveBySideAngle() {
+        if (variableKnown('A')) {
+            angles[ANGLE_B] = 90 - angles[ANGLE_A];
+
+            if (variableKnown('a')) {
+                sides[SIDE_B] = roundTwoPlaces((sides[SIDE_A] / Math.tan(Math.toRadians(angles[ANGLE_A]))));
+                sides[SIDE_C] = roundTwoPlaces(Math.sqrt((Math.pow(sides[SIDE_A], 2) + (Math.pow(sides[SIDE_B], 2)))));
+            } else if (variableKnown('b')) {
+                sides[SIDE_A] = roundTwoPlaces((sides[SIDE_B] * Math.tan(Math.toRadians(angles[ANGLE_A]))));
+                sides[SIDE_C] = roundTwoPlaces(Math.sqrt((Math.pow(sides[SIDE_A], 2) + (Math.pow(sides[SIDE_B], 2)))));
+            } else { // angle 'a' and side 'c' combo
+                sides[SIDE_A] = roundTwoPlaces((sides[SIDE_C] * Math.sin(Math.toRadians(angles[ANGLE_A]))));
+                sides[SIDE_B] = roundTwoPlaces(Math.sqrt((Math.pow(sides[SIDE_C], 2) - (Math.pow(sides[SIDE_A], 2)))));
+            }
+        }
+        else // angle B known
+        {
+            angles[ANGLE_A] = 90 - angles[ANGLE_B];
+
+            if (variableKnown('a'))
+            {
+                sides[SIDE_B] = roundTwoPlaces((sides[SIDE_A] * Math.tan(Math.toRadians(angles[ANGLE_B]))));
+                sides[SIDE_C] = roundTwoPlaces(Math.sqrt((Math.pow(sides[SIDE_A], 2) + (Math.pow(sides[SIDE_B], 2)))));
+            }
+            else if (variableKnown('b'))
+            {
+                sides[SIDE_A] = roundTwoPlaces((sides[SIDE_B] / Math.tan(Math.toRadians(angles[ANGLE_B]))));
+                sides[SIDE_C] = roundTwoPlaces(Math.sqrt((Math.pow(sides[SIDE_A], 2) + (Math.pow(sides[SIDE_B], 2)))));
+            }
+            else // angle b and side c combo
+            {
+                sides[SIDE_B] = roundTwoPlaces((sides[SIDE_C] * Math.sin(Math.toRadians(angles[ANGLE_B]))));
+                sides[SIDE_A] = roundTwoPlaces(Math.sqrt((Math.pow(sides[SIDE_C], 2) - (Math.pow(sides[SIDE_B], 2)))));
+            }
         }
     }
 
@@ -240,6 +286,16 @@ public class RightTriangleActivity extends AppCompatActivity {
 
     public double roundTwoPlaces(double number) {
         return (Math.round(100 * number) / 100.0);
+    }
+
+    public void openResults(View view)
+    {
+        setContentView(R.layout.right_triangle_results);
+    }
+
+    public void closeResults(View view)
+    {
+        setContentView(R.layout.activity_right_triangle);
     }
 
     public void closeActivity(View view)
