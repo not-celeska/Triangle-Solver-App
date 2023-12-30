@@ -35,6 +35,16 @@ public class RightTriangleActivity extends AppCompatActivity {
 //    TextView resultSideC = findViewById(R.id.resultSideB);
 //    TextView resultAngleA = findViewById(R.id.resultAngleA);
 //    TextView resultAngleB = findViewById(R.id.resultAngleB);
+    View resultsLayout; // = getLayoutInflater().inflate(R.layout.right_triangle_results, null);
+
+    TextView resultSideA; // = resultsLayout.findViewById(R.id.resultSideA);
+    TextView resultSideB;// = resultsLayout.findViewById(R.id.resultSideB);
+    TextView resultSideC; // = resultsLayout.findViewById(R.id.resultSideC);
+    TextView resultAngleA;// = resultsLayout.findViewById(R.id.resultAngleA);
+    TextView resultAngleB; // = resultsLayout.findViewById(R.id.resultAngleB);
+    TextView resultPerimeter;
+    TextView resultArea;
+
 
 
     @Override
@@ -60,10 +70,18 @@ public class RightTriangleActivity extends AppCompatActivity {
         sideFields[SIDE_C] = fieldSideC;
 
         // Result Text..
+//        resultsLayout = getLayoutInflater().inflate(R.layout.right_triangle_results, null);
+//        resultSideA = resultsLayout.findViewById(R.id.resultSideA);
+//        resultSideB = resultsLayout.findViewById(R.id.resultSideB);
+//        resultSideC = resultsLayout.findViewById(R.id.resultSideC);
+//        resultAngleA = resultsLayout.findViewById(R.id.resultAngleA);
+//        resultAngleB = resultsLayout.findViewById(R.id.resultAngleB);
+
 
     }
 
     public void submitData(View view) {
+
         // == REGISTER [LOG] INPUT ======
         registerInput();
 
@@ -110,6 +128,7 @@ public class RightTriangleActivity extends AppCompatActivity {
             if (!angle.isEmpty()) {
 
                 angles[angleField] = Double.parseDouble(angle);
+//                angleFields[angleField].getText().clear();
                 anglesInputted++;
             }
             else // if there was nothing entered.
@@ -125,6 +144,7 @@ public class RightTriangleActivity extends AppCompatActivity {
 
             if (!side.isEmpty()) {
                 sides[sideField] = Double.parseDouble(side);
+//                sideFields[sideField].getText().clear();
                 sidesInputted++;
             }
             else // if there was nothing entered.
@@ -197,8 +217,8 @@ public class RightTriangleActivity extends AppCompatActivity {
         if (variableKnown('a') && variableKnown('b'))
         {
             sides[SIDE_C] = roundTwoPlaces(Math.sqrt((Math.pow(sides[SIDE_A], 2) + (Math.pow(sides[SIDE_B], 2)))));
-            angles[ANGLE_B] = roundTwoPlaces(Math.toDegrees(Math.atan(sides[SIDE_A] / sides[SIDE_B])));
-            angles[ANGLE_A] = 90 - angles[ANGLE_B];
+            angles[ANGLE_A] = roundTwoPlaces(Math.toDegrees(Math.atan(sides[SIDE_A] / sides[SIDE_B])));
+            angles[ANGLE_B] = 90 - angles[ANGLE_A];
         }
         else if (variableKnown('a') && variableKnown('c'))
         {
@@ -297,13 +317,15 @@ public class RightTriangleActivity extends AppCompatActivity {
     }
 
     public void openResults(View view) {
-        View resultsLayout = getLayoutInflater().inflate(R.layout.right_triangle_results, null);
+        resultsLayout = getLayoutInflater().inflate(R.layout.right_triangle_results, null);
 
-        TextView resultSideA = resultsLayout.findViewById(R.id.resultSideA);
-        TextView resultSideB = resultsLayout.findViewById(R.id.resultSideB);
-        TextView resultSideC = resultsLayout.findViewById(R.id.resultSideC);
-        TextView resultAngleA = resultsLayout.findViewById(R.id.resultAngleA);
-        TextView resultAngleB = resultsLayout.findViewById(R.id.resultAngleB);
+        resultSideA = resultsLayout.findViewById(R.id.resultSideA);
+        resultSideB = resultsLayout.findViewById(R.id.resultSideB);
+        resultSideC = resultsLayout.findViewById(R.id.resultSideC);
+        resultAngleA = resultsLayout.findViewById(R.id.resultAngleA);
+        resultAngleB = resultsLayout.findViewById(R.id.resultAngleB);
+        resultPerimeter = resultsLayout.findViewById(R.id.perimeterResult);
+        resultArea = resultsLayout.findViewById(R.id.areaResult);
 
         // Use the TextViews as needed
         resultSideA.setText(String.valueOf(sides[SIDE_A]));
@@ -311,6 +333,8 @@ public class RightTriangleActivity extends AppCompatActivity {
         resultSideC.setText(String.valueOf(sides[SIDE_C]));
         resultAngleA.setText(String.valueOf(angles[ANGLE_A]));
         resultAngleB.setText(String.valueOf(angles[ANGLE_B]));
+        resultPerimeter.setText("P = " + roundTwoPlaces(sides[SIDE_A] + sides[SIDE_B] + sides[SIDE_C]) + " units");
+        resultArea.setText("A = " + roundTwoPlaces((sides[SIDE_A] * sides[SIDE_B]) / 2.0) + " units^2");
 
         // ... and so on
 
@@ -320,6 +344,23 @@ public class RightTriangleActivity extends AppCompatActivity {
     public void closeResults(View view)
     {
         setContentView(R.layout.activity_right_triangle);
+
+        // Info feedback text area.
+        info = findViewById(R.id.inputtedData);
+
+        // Initialize Angle Fields.
+        fieldAngleA = findViewById(R.id.angleA);
+        fieldAngleB = findViewById(R.id.angleB);
+        angleFields[ANGLE_A] = fieldAngleA;
+        angleFields[ANGLE_B] = fieldAngleB;
+
+        // Initialize Side Fields.
+        fieldSideA = findViewById(R.id.sideA);
+        fieldSideB = findViewById(R.id.sideB);
+        fieldSideC = findViewById(R.id.sideC);
+        sideFields[SIDE_A] = fieldSideA;
+        sideFields[SIDE_B] = fieldSideB;
+        sideFields[SIDE_C] = fieldSideC;
     }
 
     public void closeActivity(View view)
